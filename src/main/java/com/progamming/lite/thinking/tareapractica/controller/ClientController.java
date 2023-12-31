@@ -6,6 +6,8 @@ import com.progamming.lite.thinking.tareapractica.exception.ClientNotFoundExcept
 import com.progamming.lite.thinking.tareapractica.model.ClientModel;
 import com.progamming.lite.thinking.tareapractica.service.IClientService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,7 +30,7 @@ public class ClientController {
     private final IClientService iClientService;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> salvar(@RequestBody @Valid ClientRequest clientRequest,
+    public ResponseEntity<Object> salvar(@RequestBody @Valid @NotNull ClientRequest clientRequest,
                                              BindingResult bidingResult){
 
         if(bidingResult.hasErrors()){
@@ -54,7 +56,7 @@ public class ClientController {
         ClientModel clientModel = clientBuilderSave.build();
 
         iClientService.salvar(clientModel);
-        log.info("Client {} is save ", clientModel.getId());
+        log.info("Client {} guardado ", clientModel.getId());
         return CustomResponseHandler.generateResponse("Client Save",HttpStatus.CREATED, clientModel) ;
 
     }
@@ -77,12 +79,11 @@ public class ClientController {
     @GetMapping(path = "/listar/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> listar(@PathVariable Long id){
 
-        Optional<ClientModel> clientModelOptional =iClientService.findById(id);
+        Optional<ClientModel> clientModelOptional = iClientService.findById(id);
 
         if(clientModelOptional.isPresent()) {
             return CustomResponseHandler.
                     generateResponse("Cliente Encontrado", HttpStatus.OK,clientModelOptional);
-
         }else {
             throw new ClientNotFoundException("Cliente no existe");
         }
@@ -90,7 +91,7 @@ public class ClientController {
     }
 
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> actualizar(@PathVariable Long id,
+    public ResponseEntity<Object> actualizar(@PathVariable @NotNull Long id,
                                              @RequestBody @Valid ClientRequest clientRequest,
                                             BindingResult bidingResult){
 
@@ -105,7 +106,7 @@ public class ClientController {
                             clientRequest);
         }
 
-        Optional<ClientModel> clientModelOptional =iClientService.findById(id);
+        Optional<ClientModel> clientModelOptional = iClientService.findById(id);
 
         if(clientModelOptional.isEmpty()) {
             throw new ClientNotFoundException("Cliente no existe");
@@ -130,6 +131,7 @@ public class ClientController {
     }
 
     @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
     public ResponseEntity<Object> eliminar(@PathVariable Long id){
         Optional<ClientModel> clientModelOptional =iClientService.findById(id);
 
@@ -141,7 +143,7 @@ public class ClientController {
         iClientService.delete(clientModel);
 
         return CustomResponseHandler.
-                generateResponse("Cliente eliminado", HttpStatus.NO_CONTENT,clientModel);
+                generateResponse("Cliente eliminado", HttpStatus.OK, clientModel);
     }
 
 }

@@ -8,6 +8,6 @@ public interface IClientService {
      ClientModel salvar(ClientModel clientModel) ;
      List<ClientModel> findAll();
      Optional<ClientModel> findById(Long id);
-     void delete(ClientModel clientModel);
+     ClientModel delete(ClientModel clientModel);
 
 }

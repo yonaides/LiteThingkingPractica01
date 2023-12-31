@@ -28,7 +28,8 @@ public class ClientServiceImp implements IClientService {
     }
 
     @Override
-    public void delete(ClientModel clientModel) {
-        clientRepository.delete(clientModel);
+    public ClientModel delete(ClientModel clientModel) {
+         clientRepository.delete(clientModel);
+         return clientModel;
     }
 }

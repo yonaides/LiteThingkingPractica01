@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler({ClientNotFoundException.class})
-    public ResponseEntity<Object> handleStudentNotValidException(ClientNotFoundException exception) {
+    public ResponseEntity<Object> handleClientNotFoundException(ClientNotFoundException exception) {
         return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .status(HttpStatus.NOT_FOUND)
                 .body(exception.getMessage());
     }
 }
