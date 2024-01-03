@@ -4,6 +4,7 @@ import com.progamming.lite.thinking.tareapractica.model.ClientModel;
 import com.progamming.lite.thinking.tareapractica.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
