@@ -33,4 +33,9 @@ public class ClientServiceImp implements IClientService {
          clientRepository.delete(clientModel);
          return clientModel;
     }
+
+    @Override
+    public Optional<ClientModel> findByNumberDocument(Integer numberDocument) {
+        return  clientRepository.findByNumberDocument(numberDocument);
+    }
 }

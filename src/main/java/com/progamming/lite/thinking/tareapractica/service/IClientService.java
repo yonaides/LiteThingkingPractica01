@@ -10,4 +10,6 @@ public interface IClientService {
      Optional<ClientModel> findById(Long id);
      ClientModel delete(ClientModel clientModel);
 
+     Optional<ClientModel> findByNumberDocument(Integer numberDocument);
+
 }

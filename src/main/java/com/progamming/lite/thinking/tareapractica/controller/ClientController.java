@@ -3,10 +3,10 @@ package com.progamming.lite.thinking.tareapractica.controller;
 import com.progamming.lite.thinking.tareapractica.dto.ClientRequest;
 import com.progamming.lite.thinking.tareapractica.dto.CustomResponseHandler;
 import com.progamming.lite.thinking.tareapractica.exception.ClientNotFoundException;
+import com.progamming.lite.thinking.tareapractica.mock.ClientMock;
 import com.progamming.lite.thinking.tareapractica.model.ClientModel;
 import com.progamming.lite.thinking.tareapractica.service.IClientService;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 public class ClientController {
 
     private final IClientService iClientService;
+    private final Integer NUMBER_DOCUMENT_MOCK = 12345678;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> salvar(@RequestBody @Valid @NotNull ClientRequest clientRequest,
@@ -89,6 +90,25 @@ public class ClientController {
         }
 
     }
+
+    @GetMapping(path = "/listar/document/{numberDocument}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> listar(@PathVariable Integer numberDocument){
+
+        if(NUMBER_DOCUMENT_MOCK.equals(numberDocument))
+            return CustomResponseHandler.
+                    generateResponse("Cliente Mock encontrado",HttpStatus.OK, ClientMock.getClientMock());
+
+        Optional<ClientModel> clientModelOptional = iClientService.findByNumberDocument(numberDocument);
+
+        if(clientModelOptional.isPresent()) {
+            return CustomResponseHandler.
+                    generateResponse("Cliente Encontrado", HttpStatus.OK,clientModelOptional);
+        }else {
+            throw new ClientNotFoundException("Cliente no existe");
+        }
+
+    }
+
 
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> actualizar(@PathVariable @NotNull Long id,
